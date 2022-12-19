@@ -23,9 +23,8 @@ $(function () {
   $.ajax({
     url: 'http://127.0.0.1:5001/api/v1/places_search/',
     method: 'POST',
-    contentType: 'application/json',
-    dataType: 'json',
     data: JSON.stringify({}),
+    contentType: 'application/json',
     success: function (data) {
       data.forEach(d => $('.places').append(addPlace(d)));
     }
@@ -34,7 +33,7 @@ $(function () {
   function addPlace (place) {
     return `
     <article>
-    <div class="title_box">
+      <div class="title_box">
       <h2>${place.name}</h2>
       <div class="price_by_night">${place.price_by_night}
       </div>
@@ -50,7 +49,20 @@ $(function () {
       </div>
       <div class="description">${place.description}
       </div>
-      </article>
+    </article>
     `;
   }
+
+  $('button').click(() => {
+    $('.places').empty();
+    $.ajax({
+      url: 'http://127.0.0.1:5001/api/v1/places_search/',
+      method: 'POST',
+      data: JSON.stringify({ amenities: Object.keys(amenityIds) }),
+      contentType: 'application/json',
+      success: function (data) {
+        data.forEach(d => $('.places').append(addPlace(d)));
+      }
+    });
+  });
 });
